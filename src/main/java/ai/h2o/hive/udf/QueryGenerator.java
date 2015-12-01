@@ -8,7 +8,8 @@ public class QueryGenerator {
         // can clean up w/ StringUtils (apache common)
         StringBuffer query = new StringBuffer();
         for(int i=0;i<cols.length;++i){
-            query.append(cols[i] + " ");
+            query.append(cols[i]);
+            if (i != cols.length - 1) query.append(",");
         }
 
         System.out.println("SELECT fn("+query+") FROM tableName");

@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e49d1645-cac4-44e4-9bc1-2c3563b31c7d" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/GBM_C1.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/GBM_C2.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/localjars/h2o-genmodel.jar" afterPath="$PROJECT_DIR$/localjars/h2o-genmodel.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java" afterPath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java" afterPath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ScoreData.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,8 +37,8 @@
       <file leaf-file-name="QueryGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0996016">
-              <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.23904383">
+              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -620,8 +613,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0996016">
-          <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.23904383">
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding />
         </state>
       </provider>
