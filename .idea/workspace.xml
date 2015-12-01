@@ -47,10 +47,11 @@
       <file leaf-file-name="ScoreDataUDF.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7211155">
-              <caret line="121" column="26" selection-start-line="121" selection-start-column="26" selection-end-line="121" selection-end-column="26" />
+            <state vertical-scroll-proportion="0.48207173">
+              <caret line="121" column="35" selection-start-line="121" selection-start-column="35" selection-end-line="121" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#5712#5720#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -611,10 +612,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7211155">
-          <caret line="121" column="26" selection-start-line="121" selection-start-column="26" selection-end-line="121" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.48207173">
+          <caret line="121" column="35" selection-start-line="121" selection-start-column="35" selection-end-line="121" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#5712#5720#0" expanded="true" />
           </folding>
         </state>
       </provider>
