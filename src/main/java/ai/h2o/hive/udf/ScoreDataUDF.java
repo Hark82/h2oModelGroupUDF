@@ -112,14 +112,14 @@ class ScoreDataUDF extends GenericUDF {
         // get the predictions
         try {
           double[] preds = new double[p.getPredsSize()];
-          double[] preds2 = new double[p2.getPredsSize()];
+         // double[] preds2 = new double[p2.getPredsSize()];
           p.score0(data, preds);
-          p2.score0(data, preds2);
+         // p2.score0(data, preds2);
           //return Double.toString(preds[0]) + Double.toString(preds2[0]);
-          double[] response = new double[2];
-          response[0] = preds[2];
-          response[1] = preds2[2];
-          return response;
+         // double[] response = new double[2];
+          //response[0] = preds[2];
+          //response[1] = preds2[2];
+          return preds[2];
         } catch (Throwable e) {
           throw new UDFArgumentException("H2O predict function threw exception: " + e.toString());
         }
