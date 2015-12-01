@@ -2,6 +2,7 @@ package ai.h2o.hive.udf;
 
 import java.util.Arrays;
 
+import hex.genmodel.GenModel;
 import org.apache.commons.logging.Log;
 import org.apache.hadoop.hive.ql.exec.MapredContext;
 import org.apache.hadoop.hive.ql.udf.UDFType;
@@ -22,7 +23,12 @@ import org.apache.log4j.Logger;
 
 class ScoreDataUDF extends GenericUDF {
   private PrimitiveObjectInspector[] inFieldOI;
-  GBMModel p = new GBMModel();
+
+  //GBMModel p = new GBMModel();
+
+  GBM_C1 p = new GBM_C1();
+  GBM_C2 p2 = new GBM_C2();
+
 
   @Override
   public String getDisplayString(String[] args) {
@@ -106,8 +112,14 @@ class ScoreDataUDF extends GenericUDF {
         // get the predictions
         try {
           double[] preds = new double[p.getPredsSize()];
+          double[] preds2 = new double[p2.getPredsSize()];
           p.score0(data, preds);
-          return preds[0];
+          p2.score0(data, preds2);
+          //return Double.toString(preds[0]) + Double.toString(preds2[0]);
+          Object[] response = new Object[2];
+          response[0] = p;
+          response[1] = p2;
+          return response;
         } catch (Throwable e) {
           throw new UDFArgumentException("H2O predict function threw exception: " + e.toString());
         }

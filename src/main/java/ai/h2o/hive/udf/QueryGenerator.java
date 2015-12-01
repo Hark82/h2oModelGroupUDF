@@ -2,7 +2,7 @@ package ai.h2o.hive.udf;
 
 public class QueryGenerator {
     public static void main (String [] args) {
-        GBMModel p = new GBMModel();
+        GBM_C1 p = new GBM_C1();
         String[] cols = p.getNames();
 
         // can clean up w/ StringUtils (apache common)
