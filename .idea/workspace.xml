@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e49d1645-cac4-44e4-9bc1-2c3563b31c7d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java" afterPath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java" afterPath="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java" />
     </list>
     <ignored path="ScoreData.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,20 +34,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QueryGenerator.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="QueryGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.23904383">
+            <state vertical-scroll-proportion="0.0">
               <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScoreDataUDF.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ScoreDataUDF.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="0.6015936">
               <caret line="121" column="26" selection-start-line="121" selection-start-column="26" selection-end-line="121" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -120,8 +120,8 @@
         <option value="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/gbm_C2.java" />
         <option value="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/GBM_C1.java" />
         <option value="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/GBM_C2.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java" />
         <option value="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java" />
       </list>
     </option>
   </component>
@@ -601,21 +601,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6015936">
           <caret line="121" column="26" selection-start-line="121" selection-start-column="26" selection-end-line="121" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/QueryGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23904383">
-          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>

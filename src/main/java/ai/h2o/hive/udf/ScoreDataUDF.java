@@ -116,9 +116,9 @@ class ScoreDataUDF extends GenericUDF {
           p.score0(data, preds);
           p2.score0(data, preds2);
           //return Double.toString(preds[0]) + Double.toString(preds2[0]);
-          Object[] response = new Object[2];
-          response[0] = p;
-          response[1] = p2;
+          double[] response = new double[2];
+          response[0] = preds[2];
+          response[1] = preds2[2];
           return response;
         } catch (Throwable e) {
           throw new UDFArgumentException("H2O predict function threw exception: " + e.toString());
