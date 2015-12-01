@@ -3,6 +3,7 @@ package ai.h2o.hive.udf;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import hex.genmodel.GenModel;
 import org.apache.commons.logging.Log;
@@ -14,6 +15,7 @@ import org.apache.hadoop.hive.ql.exec.UDFArgumentLengthException;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.udf.generic.GenericUDF;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.mapred.JobConf;
@@ -25,6 +27,7 @@ import org.apache.log4j.Logger;
 
 class ScoreDataUDF extends GenericUDF {
   private PrimitiveObjectInspector[] inFieldOI;
+  private PrimitiveObjectInspector[] outFieldOI;
 
   //GBMModel p = new GBMModel();
 
@@ -69,8 +72,15 @@ class ScoreDataUDF extends GenericUDF {
       inFieldOI[i] = (PrimitiveObjectInspector) args[i];
     }
 
-    // the return type of our function is a double, so we provide the correct object inspector
-    return PrimitiveObjectInspectorFactory.javaDoubleObjectInspector;
+
+    // we need to return an ObjectInspector for an array of doubles
+    List<String> outputFieldNames = Arrays.asList("model1","model2");
+    List<ObjectInspector> outputInspectors = new ArrayList<ObjectInspector>();
+
+    outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
+    outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
+
+    return ObjectInspectorFactory.getStandardStructObjectInspector(outputFieldNames, outputInspectors);
   }
 
   @Override
