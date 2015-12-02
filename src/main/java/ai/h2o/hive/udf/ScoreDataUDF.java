@@ -131,7 +131,7 @@ class ScoreDataUDF extends GenericUDF {
 
           for(int i = 0; i < 96; i++) {
             double[] d = p.score0(data, preds);
-            result_set.add(d[0]);
+            result_set.add(d[2]);
           }
 
           return result_set;
