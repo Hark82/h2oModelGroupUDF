@@ -28,16 +28,24 @@ import org.apache.log4j.Logger;
 class ScoreDataUDF extends GenericUDF {
   private PrimitiveObjectInspector[] inFieldOI;
   private PrimitiveObjectInspector[] outFieldOI;
-
-  //GBMModel p = new GBMModel();
-
-  GBM_C1 p = new GBM_C1();
-  GBM_C2 p2 = new GBM_C2();
-
+  GenModel [] _models;
+  public ScoreDataUDF() {
+    //GBMModel p = new GBMModel();
+    String name = "ai.h2o.hive.udf.GBM_C";
+    _models = new GenModel[96];
+    for (int i = 1;i <= 96; ++i) {
+      try {
+        _models[i-1] = (GenModel)Class.forName(name + i).newInstance();
+      } catch (Throwable t) {
+        t.printStackTrace();
+        throw new RuntimeException(t);
+      } 
+    }
+  }
 
   @Override
   public String getDisplayString(String[] args) {
-    return "scoredata("+Arrays.asList(p.getNames())+").";
+    return "scoredata("+Arrays.asList(_models[0].getNames())+").";
   }
   @Override
   public void configure(MapredContext context) {
@@ -49,9 +57,9 @@ class ScoreDataUDF extends GenericUDF {
   public ObjectInspector initialize(ObjectInspector[] args) throws UDFArgumentException {
     // Basic argument count check
     // Expects one less argument than model used; results column is dropped
-    if (args.length != p.getNumCols()) {
+    if (args.length != _models[0].getNumCols()) {
       throw new UDFArgumentLengthException("Incorrect number of arguments." +
-              "  scoredata() requires: "+ Arrays.asList(p.getNames())
+              "  scoredata() requires: "+ Arrays.asList(_models[0].getNames())
               +", in the listed order. Received "+args.length+" arguments.");
     }
 
@@ -90,7 +98,7 @@ class ScoreDataUDF extends GenericUDF {
   public Object evaluate(DeferredObject[] record) throws HiveException {
     // Expects one less argument than model used; results column is dropped
     if (record != null) {
-      if (record.length == p.getNumCols()) {
+      if (record.length == _models[0].getNumCols()) {
         double[] data = new double[record.length];
         //Sadly, HIVE UDF doesn't currently make the field name available.
         //Thus this UDF must depend solely on the arguments maintaining the same
@@ -100,10 +108,10 @@ class ScoreDataUDF extends GenericUDF {
             Object o = inFieldOI[i].getPrimitiveJavaObject(record[i].get());
             if (o instanceof java.lang.String) {
               // Hive wraps strings in double quotes, remove
-              data[i] = p.mapEnum(i, ((String) o).replace("\"", ""));
+              data[i] = _models[0].mapEnum(i, ((String) o).replace("\"", ""));
               if (data[i] == -1)
                 throw new UDFArgumentException("scoredata(...): The value " + (String) o
-                    + " is not a known category for column " + p.getNames()[i]);
+                    + " is not a known category for column " + _models[0].getNames()[i]);
             } else if (o instanceof Double) {
               data[i] = ((Double) o).doubleValue();
             } else if (o instanceof Float) {
@@ -126,11 +134,10 @@ class ScoreDataUDF extends GenericUDF {
         }
         // get the predictions
         try {
-          double[] preds = new double[p.getPredsSize()];
+          double[] preds = new double[_models[0].getPredsSize()];
           ArrayList<Object> result_set = new ArrayList<Object>();
-
           for(int i = 0; i < 96; i++) {
-            double[] d = p.score0(data, preds);
+            double[] d = _models[i].score0(data, preds);
             result_set.add(d[2]);
           }
 
@@ -140,7 +147,7 @@ class ScoreDataUDF extends GenericUDF {
         }
       } else {
         throw new UDFArgumentException("Incorrect number of arguments." +
-            "  scoredata() requires: " + Arrays.asList(p.getNames()) + ", in order. Received "
+            "  scoredata() requires: " + Arrays.asList(_models[0].getNames()) + ", in order. Received "
             +record.length+" arguments.");
       }
     } else { // record == null
