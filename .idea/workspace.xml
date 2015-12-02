@@ -37,12 +37,13 @@
       <file leaf-file-name="ScoreDataUDF.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.01992032">
-              <caret line="83" column="3" selection-start-line="83" selection-start-column="3" selection-end-line="83" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.7211155">
+              <caret line="132" column="47" selection-start-line="132" selection-start-column="47" selection-end-line="132" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3417#3434#0" expanded="true" />
-                <element signature="e#6194#6202#0" expanded="true" />
+                <element signature="e#3410#3418#0" expanded="true" />
+                <element signature="e#3480#3497#0" expanded="true" />
+                <element signature="e#5891#5899#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -629,12 +630,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ai/h2o/hive/udf/ScoreDataUDF.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.01992032">
-          <caret line="83" column="3" selection-start-line="83" selection-start-column="3" selection-end-line="83" selection-end-column="3" />
+        <state vertical-scroll-proportion="0.7211155">
+          <caret line="132" column="47" selection-start-line="132" selection-start-column="47" selection-end-line="132" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3417#3434#0" expanded="true" />
-            <element signature="e#6194#6202#0" expanded="true" />
+            <element signature="e#3410#3418#0" expanded="true" />
+            <element signature="e#3480#3497#0" expanded="true" />
+            <element signature="e#5891#5899#0" expanded="true" />
           </folding>
         </state>
       </provider>

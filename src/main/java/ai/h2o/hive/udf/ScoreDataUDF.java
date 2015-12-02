@@ -74,11 +74,14 @@ class ScoreDataUDF extends GenericUDF {
 
 
     // we need to return an ObjectInspector for an array of doubles
-    List<String> outputFieldNames = Arrays.asList("model1","model2");
+    //List<String> outputFieldNames = Arrays.asList("model1","model2");
+    List<String> outputFieldNames = new ArrayList<String>();
     List<ObjectInspector> outputInspectors = new ArrayList<ObjectInspector>();
 
-    outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
-    outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
+    for(int i = 0; i < 96; i++) {
+      outputFieldNames.add("model"+Integer.toString(i+1));
+      outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
+    }
 
     return ObjectInspectorFactory.getStandardStructObjectInspector(outputFieldNames, outputInspectors);
   }
@@ -124,17 +127,13 @@ class ScoreDataUDF extends GenericUDF {
         // get the predictions
         try {
           double[] preds = new double[p.getPredsSize()];
-          //double[] preds2 = new double[p2.getPredsSize()];
-          p.score0(data, preds);
-          //p2.score0(data, preds2);
-          //return Double.toString(preds[0]) + Double.toString(preds2[0]);
-          //double[] response = new double[2];
-          //response[0] = preds[2];
-          //response[1] = preds2[2];
-          //result_set = new HashSet<Object>(response);
           ArrayList<Object> result_set = new ArrayList<Object>();
-          result_set.add(preds[2]);
-          //result_set.add(preds2[2]);
+
+          for(int i = 0; i < 96; i++) {
+            double[] d = p.score0(data, preds);
+            result_set.add(d[0]);
+          }
+
           return result_set;
         } catch (Throwable e) {
           throw new UDFArgumentException("H2O predict function threw exception: " + e.toString());
