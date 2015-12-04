@@ -29,6 +29,20 @@ class ScoreDataUDF extends GenericUDF {
   private PrimitiveObjectInspector[] inFieldOI;
   private PrimitiveObjectInspector[] outFieldOI;
   GenModel [] _models;
+  public ScoreDataUDF() {
+    //GBMModel p = new GBMModel();
+    /*
+    String name = "ai.h2o.hive.udf.GBM_C";
+    _models = new GenModel[96];
+    for (int i = 1;i <= 96; ++i) {
+      try {
+        _models[i-1] = (GenModel)Class.forName(name + i).newInstance();
+      } catch (Throwable t) {
+        t.printStackTrace();
+        throw new RuntimeException(t);
+      } 
+    } */
+  }
 
   @Override
   public String getDisplayString(String[] args) {
@@ -47,12 +61,11 @@ class ScoreDataUDF extends GenericUDF {
     _models = new GenModel[96];
     for (int i = 1;i <= 96; ++i) {
       try {
-        _models[i - 1] = (GenModel) Class.forName(name + i).newInstance();
+        _models[i-1] = (GenModel)Class.forName(name + i).newInstance();
       } catch (Throwable t) {
         t.printStackTrace();
         throw new RuntimeException(t);
       }
-    }
 
       // Basic argument count check
     // Expects one less argument than model used; results column is dropped
