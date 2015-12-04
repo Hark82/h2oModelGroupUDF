@@ -31,6 +31,7 @@ class ScoreDataUDF extends GenericUDF {
   GenModel [] _models;
   public ScoreDataUDF() {
     //GBMModel p = new GBMModel();
+    /*
     String name = "ai.h2o.hive.udf.GBM_C";
     _models = new GenModel[96];
     for (int i = 1;i <= 96; ++i) {
@@ -40,7 +41,7 @@ class ScoreDataUDF extends GenericUDF {
         t.printStackTrace();
         throw new RuntimeException(t);
       } 
-    }
+    } */
   }
 
   @Override
@@ -55,7 +56,18 @@ class ScoreDataUDF extends GenericUDF {
   }
   @Override
   public ObjectInspector initialize(ObjectInspector[] args) throws UDFArgumentException {
-    // Basic argument count check
+
+    String name = "ai.h2o.hive.udf.GBM_C";
+    _models = new GenModel[96];
+    for (int i = 1;i <= 96; ++i) {
+      try {
+        _models[i-1] = (GenModel)Class.forName(name + i).newInstance();
+      } catch (Throwable t) {
+        t.printStackTrace();
+        throw new RuntimeException(t);
+      }
+
+      // Basic argument count check
     // Expects one less argument than model used; results column is dropped
     if (args.length != _models[0].getNumCols()) {
       throw new UDFArgumentLengthException("Incorrect number of arguments." +
