@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
         extended="Example:\n"+"> SELECT scoredata(*) FROM target_data;")
 
 class ScoreDataUDF extends GenericUDF {
+  private final int NUMMODEL = 1;
   private PrimitiveObjectInspector[] inFieldOI;
   private PrimitiveObjectInspector[] outFieldOI;
   GenModel [] _models;
@@ -65,8 +66,9 @@ class ScoreDataUDF extends GenericUDF {
     log("Begin: initialize()");
 
     String name = "ai.h2o.hive.udf.GBM_C";
-    _models = new GenModel[96];
-    for (int i = 1;i <= 96; ++i) {
+    //int nummodel = 1;	
+    _models = new GenModel[NUMMODEL];
+    for (int i = 1;i <= NUMMODEL; ++i) {
       try {
         _models[i - 1] = (GenModel) Class.forName(name + i).newInstance();
       } catch (Throwable t) {
@@ -106,7 +108,7 @@ class ScoreDataUDF extends GenericUDF {
     List<String> outputFieldNames = new ArrayList<String>();
     List<ObjectInspector> outputInspectors = new ArrayList<ObjectInspector>();
 
-    for(int i = 0; i < 96; i++) {
+    for(int i = 0; i < NUMMODEL; i++) {
       outputFieldNames.add("model"+Integer.toString(i+1));
       outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
     }
@@ -164,7 +166,7 @@ class ScoreDataUDF extends GenericUDF {
         try {
           double[] preds = new double[_models[0].getPredsSize()];
           ArrayList<Object> result_set = new ArrayList<Object>();
-          for(int i = 0; i < 1; i++) {
+          for(int i = 0; i < NUMMODEL; i++) {
             double[] d = _models[i].score0(data, preds);
             result_set.add(d[2]);
           }
