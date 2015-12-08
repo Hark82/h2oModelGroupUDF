@@ -44,6 +44,10 @@ class ScoreDataUDF extends GenericUDF {
     } */
   }
 
+  public void log (String s) {
+    System.out.println("ScoreDataUDF: " + s);
+  }
+
   @Override
   public String getDisplayString(String[] args) {
     return "scoredata("+Arrays.asList(_models[0].getNames())+").";
@@ -56,6 +60,9 @@ class ScoreDataUDF extends GenericUDF {
   }
   @Override
   public ObjectInspector initialize(ObjectInspector[] args) throws UDFArgumentException {
+
+    long start = System.currentTimeMillis();
+    log("Begin: initialize()");
 
     String name = "ai.h2o.hive.udf.GBM_C";
     _models = new GenModel[96];
@@ -104,12 +111,20 @@ class ScoreDataUDF extends GenericUDF {
       outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
     }
 
+    long end = System.currentTimeMillis() - start;
+    log("End: initialize(), took: " + Long.toString(end));
+
     return ObjectInspectorFactory.getStandardStructObjectInspector(outputFieldNames, outputInspectors);
   }
 
   @Override
   public Object evaluate(DeferredObject[] record) throws HiveException {
+
+    long start = System.currentTimeMillis();
+    log("Begin: evaluate()");
+
     // Expects one less argument than model used; results column is dropped
+
     if (record != null) {
       if (record.length == _models[0].getNumCols()) {
         double[] data = new double[record.length];
@@ -149,10 +164,13 @@ class ScoreDataUDF extends GenericUDF {
         try {
           double[] preds = new double[_models[0].getPredsSize()];
           ArrayList<Object> result_set = new ArrayList<Object>();
-          for(int i = 0; i < 96; i++) {
+          for(int i = 0; i < 1; i++) {
             double[] d = _models[i].score0(data, preds);
             result_set.add(d[2]);
           }
+
+          long end = System.currentTimeMillis() - start;
+          log("End: evaluate(), took: " + Long.toString(end));
 
           return result_set;
         } catch (Throwable e) {
