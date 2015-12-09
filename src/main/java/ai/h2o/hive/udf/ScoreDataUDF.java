@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
         extended="Example:\n"+"> SELECT scoredata(*) FROM target_data;")
 
 class ScoreDataUDF extends GenericUDF {
-  private final int NUMMODEL = 1;
+  private final int NUMMODEL = 96;
 
   private PrimitiveObjectInspector[] inFieldOI;
   private PrimitiveObjectInspector[] outFieldOI;
