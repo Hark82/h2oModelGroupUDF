@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 
 class ScoreDataUDF extends GenericUDF {
   private final int NUMMODEL = 1;
-  private final String[] requiredJars = {"localjars/h2o-genmodel.jar", "target/ScoreData-1.0-SNAPSHOT.jar"};
+  private final String[] requiredJars = {"localjars/h2o-genmodel.jar"};
 
   private PrimitiveObjectInspector[] inFieldOI;
   private PrimitiveObjectInspector[] outFieldOI;
@@ -44,7 +44,7 @@ class ScoreDataUDF extends GenericUDF {
   }
 
   @Override
-  public String[] getRequiredFiles() {
+  public String[] getRequiredJars() {
     return requiredJars;
   }
 
