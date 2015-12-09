@@ -27,38 +27,43 @@ import org.apache.log4j.Logger;
 
 class ScoreDataUDF extends GenericUDF {
   private final int NUMMODEL = 1;
+  private final String[] requiredJars = {"localjars/h2o-genmodel.jar", "target/ScoreData-1.0-SNAPSHOT.jar"};
+
   private PrimitiveObjectInspector[] inFieldOI;
   private PrimitiveObjectInspector[] outFieldOI;
+
   GenModel [] _models;
-  public ScoreDataUDF() {
-    //GBMModel p = new GBMModel();
-    /*
-    String name = "ai.h2o.hive.udf.GBM_C";
-    _models = new GenModel[96];
-    for (int i = 1;i <= 96; ++i) {
-      try {
-        _models[i-1] = (GenModel)Class.forName(name + i).newInstance();
-      } catch (Throwable t) {
-        t.printStackTrace();
-        throw new RuntimeException(t);
-      } 
-    } */
-  }
+
 
   public void log (String s) {
     System.out.println("ScoreDataUDF: " + s);
+  }
+
+  public void initModels() {
+
+  }
+
+  @Override
+  public String[] getRequiredFiles() {
+    return requiredJars;
   }
 
   @Override
   public String getDisplayString(String[] args) {
     return "scoredata("+Arrays.asList(_models[0].getNames())+").";
   }
+
+
+
   @Override
   public void configure(MapredContext context) {
     super.configure(context);
     context.toString();
     JobConf jc = context.getJobConf();
   }
+
+
+
   @Override
   public ObjectInspector initialize(ObjectInspector[] args) throws UDFArgumentException {
 
@@ -66,7 +71,6 @@ class ScoreDataUDF extends GenericUDF {
     log("Begin: initialize()");
 
     String name = "ai.h2o.hive.udf.GBM_C";
-    //int nummodel = 1;	
     _models = new GenModel[NUMMODEL];
     for (int i = 1;i <= NUMMODEL; ++i) {
       try {
@@ -104,7 +108,6 @@ class ScoreDataUDF extends GenericUDF {
 
 
     // we need to return an ObjectInspector for an array of doubles
-    //List<String> outputFieldNames = Arrays.asList("model1","model2");
     List<String> outputFieldNames = new ArrayList<String>();
     List<ObjectInspector> outputInspectors = new ArrayList<ObjectInspector>();
 
