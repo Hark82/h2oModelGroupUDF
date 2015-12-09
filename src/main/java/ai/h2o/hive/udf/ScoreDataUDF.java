@@ -27,7 +27,6 @@ import org.apache.log4j.Logger;
 
 class ScoreDataUDF extends GenericUDF {
   private final int NUMMODEL = 1;
-  private final String[] requiredJars = {"localjars/h2o-genmodel.jar"};
 
   private PrimitiveObjectInspector[] inFieldOI;
   private PrimitiveObjectInspector[] outFieldOI;
@@ -37,15 +36,6 @@ class ScoreDataUDF extends GenericUDF {
 
   public void log (String s) {
     System.out.println("ScoreDataUDF: " + s);
-  }
-
-  public void initModels() {
-
-  }
-
-  @Override
-  public String[] getRequiredJars() {
-    return requiredJars;
   }
 
   @Override
@@ -119,7 +109,7 @@ class ScoreDataUDF extends GenericUDF {
     long end = System.currentTimeMillis() - start;
     log("End: initialize(), took: " + Long.toString(end));
 
-    return ObjectInspectorFactory.getStandardStructObjectInspector(outputFieldNames, outputInspectors);
+    return ObjectInspectorFactory.getStandardListObjectInspector(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
   }
 
   @Override
