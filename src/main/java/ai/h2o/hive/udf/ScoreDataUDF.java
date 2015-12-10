@@ -2,8 +2,6 @@ package ai.h2o.hive.udf;
 
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 import hex.genmodel.GenModel;
 import org.apache.commons.logging.Log;
@@ -26,13 +24,10 @@ import org.apache.log4j.Logger;
         extended="Example:\n"+"> SELECT scoredata(*) FROM target_data;")
 
 class ScoreDataUDF extends GenericUDF {
-  private final int NUMMODEL = 96;
-
   private PrimitiveObjectInspector[] inFieldOI;
-  private PrimitiveObjectInspector[] outFieldOI;
 
   GenModel [] _models;
-
+  private final int NUMMODEL = 96;
 
   public void log (String s) {
     System.out.println("ScoreDataUDF: " + s);
@@ -43,16 +38,12 @@ class ScoreDataUDF extends GenericUDF {
     return "scoredata("+Arrays.asList(_models[0].getNames())+").";
   }
 
-
-
   @Override
   public void configure(MapredContext context) {
     super.configure(context);
     context.toString();
     JobConf jc = context.getJobConf();
   }
-
-
 
   @Override
   public ObjectInspector initialize(ObjectInspector[] args) throws UDFArgumentException {
@@ -71,7 +62,7 @@ class ScoreDataUDF extends GenericUDF {
       }
     }
 
-      // Basic argument count check
+    // Basic argument count check
     // Expects one less argument than model used; results column is dropped
     if (args.length != _models[0].getNumCols()) {
       throw new UDFArgumentLengthException("Incorrect number of arguments." +
@@ -94,16 +85,6 @@ class ScoreDataUDF extends GenericUDF {
               && pCat != PrimitiveObjectInspector.PrimitiveCategory.SHORT)
         throw new UDFArgumentException("scoredata(...): Cannot accept type: " + pCat.toString());
       inFieldOI[i] = (PrimitiveObjectInspector) args[i];
-    }
-
-
-    // we need to return an ObjectInspector for an array of doubles
-    List<String> outputFieldNames = new ArrayList<String>();
-    List<ObjectInspector> outputInspectors = new ArrayList<ObjectInspector>();
-
-    for(int i = 0; i < NUMMODEL; i++) {
-      outputFieldNames.add("model"+Integer.toString(i+1));
-      outputInspectors.add(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
     }
 
     long end = System.currentTimeMillis() - start;
@@ -157,7 +138,7 @@ class ScoreDataUDF extends GenericUDF {
         }
         // get the predictions
         try {
-          double[] preds = new double[_models[0].getPredsSize()];
+          double[] preds = new double[_models[0].getPredsSize()]; //assume all models have same predictors
           ArrayList<Object> result_set = new ArrayList<Object>();
           for(int i = 0; i < NUMMODEL; i++) {
             double[] d = _models[i].score0(data, preds);
