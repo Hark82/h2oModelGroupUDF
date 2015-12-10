@@ -1,5 +1,9 @@
 package ai.h2o.hive.udf;
 
+/*
+    Prints out query with correct column names based on what POJO expects
+ */
+
 public class QueryGenerator {
     public static void main (String [] args) {
         GBM_C1 p = new GBM_C1();

@@ -51,6 +51,7 @@ class ScoreDataUDF extends GenericUDF {
     long start = System.currentTimeMillis();
     log("Begin: initialize()");
 
+    // init models
     String name = "ai.h2o.hive.udf.GBM_C";
     _models = new GenModel[NUMMODEL];
     for (int i = 1;i <= NUMMODEL; ++i) {
