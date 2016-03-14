@@ -29,6 +29,7 @@ public class GBM_C1 extends GenModel {
   public int nfeatures() { return 4499; }
   public int nclasses() { return 2; }
 
+
   // Names of columns used by model.
   public static final String[] NAMES = NamesHolder_GBM_C1.VALUES;
   // Number of output classes included in training data response column.
