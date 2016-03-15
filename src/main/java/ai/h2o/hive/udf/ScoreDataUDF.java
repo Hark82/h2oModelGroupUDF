@@ -100,6 +100,13 @@ class ScoreDataUDF extends GenericUDF {
     long start = System.currentTimeMillis();
     log("Begin: evaluate()");
 
+    // record will be the total set of predictors requires
+    //
+
+
+
+
+
     // Expects one less argument than model used; results column is dropped
 
     if (record != null) {
@@ -137,8 +144,19 @@ class ScoreDataUDF extends GenericUDF {
             throw new UDFArgumentException("Unexpected exception on argument # " + i + ". " + e.toString());
           }
         }
+
         // get the predictions
         try {
+
+          /*
+            pseudo
+
+            for each model
+              get the column names it needs
+
+
+          */
+
           double[] preds = new double[_models[0].getPredsSize()]; //assume all models have same predictors
           ArrayList<Object> result_set = new ArrayList<Object>();
           for(int i = 0; i < NUMMODEL; i++) {
