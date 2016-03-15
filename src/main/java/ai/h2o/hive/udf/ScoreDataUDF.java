@@ -2,6 +2,7 @@ package ai.h2o.hive.udf;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import hex.genmodel.GenModel;
 import org.apache.commons.logging.Log;
@@ -28,6 +29,8 @@ class ScoreDataUDF extends GenericUDF {
 
   GenModel [] _models;
   private final int NUMMODEL = 96;
+
+  private LinkedHashMap<String, Integer> columnIndexes = new LinkedHashMap<>();
 
   public void log (String s) {
     System.out.println("ScoreDataUDF: " + s);
@@ -63,11 +66,25 @@ class ScoreDataUDF extends GenericUDF {
       }
     }
 
+    // Build columnIndex mapping
+    int columnMappingIndex = 0;
+    for(int i = 0; i < _models.length; i++) {
+      GenModel m = _models[i];
+      String[] mcols = m.getNames();
+      for (int j = 0; j < mcols.length; j++) {
+        Integer index = columnIndexes.get(mcols[j]);
+        if (index == null) {
+          columnIndexes.put(mcols[j], columnMappingIndex);
+          columnMappingIndex++;
+        }
+      }
+    }
+
     // Basic argument count check
     // Expects one less argument than model used; results column is dropped
-    if (args.length != _models[0].getNumCols()) {
+    if (args.length != columnIndexes.size()) {
       throw new UDFArgumentLengthException("Incorrect number of arguments." +
-              "  scoredata() requires: "+ Arrays.asList(_models[0].getNames())
+              "  scoredata() requires: "+ Arrays.asList(columnIndexes.keySet())
               +", in the listed order. Received "+args.length+" arguments.");
     }
 
@@ -99,13 +116,6 @@ class ScoreDataUDF extends GenericUDF {
 
     long start = System.currentTimeMillis();
     log("Begin: evaluate()");
-
-    // record will be the total set of predictors requires
-    //
-
-
-
-
 
     // Expects one less argument than model used; results column is dropped
 
