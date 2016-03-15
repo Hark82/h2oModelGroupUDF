@@ -155,22 +155,19 @@ class ScoreDataUDF extends GenericUDF {
           }
         }
 
-        // get the predictions
         try {
-
-          /*
-            pseudo
-
-            for each model
-              get the column names it needs
-
-
-          */
-
-          double[] preds = new double[_models[0].getPredsSize()]; //assume all models have same predictors
           ArrayList<Object> result_set = new ArrayList<Object>();
-          for(int i = 0; i < NUMMODEL; i++) {
-            double[] d = _models[i].score0(data, preds);
+
+          for (int i = 0; i < NUMMODEL; i++) {
+            double[] toscore = new double[_models[i].nfeatures()];
+            String[] predictors = _models[i].getNames();
+
+            for (int j = 0; j < toscore.length; j++) {
+              toscore[j] = data[columnIndexes.get(predictors[j])];
+            }
+
+            double[] response = new double[_models[0].getPredsSize()]; // assume all models have the same response
+            double[] d = _models[i].score0(toscore, response);
             result_set.add(d[2]);
           }
 
