@@ -8,10 +8,10 @@ import hex.genmodel.GenModel;
  * Created by nkkarpov on 3/16/16.
  */
 public class ModelGroup extends ArrayList<GenModel> {
-    public LinkedHashMap<String, Integer> _columnIndex;
+    public LinkedHashMap<String, Integer> _groupPredictors;
 
     public ModelGroup() {
-        this._columnIndex = new LinkedHashMap<>();
+        this._groupPredictors = new LinkedHashMap<>();
     }
 
     public void reflectAndAddModel(String cl) {
@@ -31,9 +31,9 @@ public class ModelGroup extends ArrayList<GenModel> {
     public void addModel(GenModel m) {
         String[] predictors = m.getNames();
         for(int i = 0; i < predictors.length; i++) {
-            if(this._columnIndex.get(predictors[i]) == null) {
+            if(this._groupPredictors.get(predictors[i]) == null) {
                 // Add this new model's predictors to global predictors if doesn't exist
-                this._columnIndex.put(predictors[i], this._columnIndex.size());
+                this._groupPredictors.put(predictors[i], this._groupPredictors.size());
             }
         }
 
@@ -51,7 +51,7 @@ public class ModelGroup extends ArrayList<GenModel> {
             double[] model_data = new double[features.length];
             double[] model_response = new double[m.getPredsSize()];
             for(int j = 0; j < features.length; j++) {
-                model_data[j] = data[this._columnIndex.get(features[j])];
+                model_data[j] = data[this._groupPredictors.get(features[j])];
             }
 
             // get & add prediction to result
