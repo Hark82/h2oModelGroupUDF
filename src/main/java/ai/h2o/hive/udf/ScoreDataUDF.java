@@ -156,12 +156,14 @@ class ScoreDataUDF extends GenericUDF {
         }
 
         try {
-          ArrayList<Object> result_set = new ArrayList<Object>();
+          ArrayList<Object> result_set = new ArrayList<>();
 
           for (int i = 0; i < NUMMODEL; i++) {
             double[] toscore = new double[_models[i].nfeatures()];
             String[] predictors = _models[i].getNames();
 
+            // use map index to fill toscore w/ correct subset of predictors
+            // optimize this later
             for (int j = 0; j < toscore.length; j++) {
               toscore[j] = data[columnIndexes.get(predictors[j])];
             }
