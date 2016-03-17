@@ -30,7 +30,7 @@ class ScoreDataUDF extends GenericUDF {
   GenModel [] _models;
   private final int NUMMODEL = 96;
 
-  private LinkedHashMap<String, Integer> columnIndexes = new LinkedHashMap<>();
+  ModelGroup mg;
 
   public void log (String s) {
     System.out.println("ScoreDataUDF: " + s);
@@ -54,37 +54,28 @@ class ScoreDataUDF extends GenericUDF {
     long start = System.currentTimeMillis();
     log("Begin: initialize()");
 
-    // init models
-    String name = "ai.h2o.hive.udf.GBM_C";
-    _models = new GenModel[NUMMODEL];
-    for (int i = 1;i <= NUMMODEL; ++i) {
-      try {
-        _models[i - 1] = (GenModel) Class.forName(name + i).newInstance();
-      } catch (Throwable t) {
-        t.printStackTrace();
-        throw new RuntimeException(t);
-      }
-    }
+    mg = new ModelGroup();
 
-    // Build columnIndex mapping
-    int columnMappingIndex = 0;
-    for(int i = 0; i < _models.length; i++) {
-      GenModel m = _models[i];
-      String[] mcols = m.getNames();
-      for (int j = 0; j < mcols.length; j++) {
-        Integer index = columnIndexes.get(mcols[j]);
-        if (index == null) {
-          columnIndexes.put(mcols[j], columnMappingIndex);
-          columnMappingIndex++;
-        }
-      }
-    }
+    String[] model_names = {"ai.h2o.hive.udf.models.glm1",
+            "ai.h2o.hive.udf.models.glm2",
+            "ai.h2o.hive.udf.models.glm3",
+            "ai.h2o.hive.udf.models.glm4",
+            "ai.h2o.hive.udf.models.glm5",
+            "ai.h2o.hive.udf.models.glm6",
+            "ai.h2o.hive.udf.models.gbm1",
+            "ai.h2o.hive.udf.models.gbm2",
+            "ai.h2o.hive.udf.models.gbm3",
+            "ai.h2o.hive.udf.models.gbm4",
+            "ai.h2o.hive.udf.models.gbm5",
+            "ai.h2o.hive.udf.models.gbm6"};
+
+    mg.reflectAndAddModels(model_names);
 
     // Basic argument count check
     // Expects one less argument than model used; results column is dropped
-    if (args.length != columnIndexes.size()) {
+    if (args.length != mg._groupPredictors.size()) {
       throw new UDFArgumentLengthException("Incorrect number of arguments." +
-              "  scoredata() requires: "+ Arrays.asList(columnIndexes.keySet())
+              "  scoredata() requires: "+ Arrays.asList(mg._groupPredictors.keySet())
               +", in the listed order. Received "+args.length+" arguments.");
     }
 
@@ -120,7 +111,7 @@ class ScoreDataUDF extends GenericUDF {
     // Expects one less argument than model used; results column is dropped
 
     if (record != null) {
-      if (record.length == _models[0].getNumCols()) {
+      if (record.length == mg._groupPredictors.size()) {
         double[] data = new double[record.length];
         //Sadly, HIVE UDF doesn't currently make the field name available.
         //Thus this UDF must depend solely on the arguments maintaining the same
@@ -129,11 +120,19 @@ class ScoreDataUDF extends GenericUDF {
           try {
             Object o = inFieldOI[i].getPrimitiveJavaObject(record[i].get());
             if (o instanceof java.lang.String) {
+              log("o is String");
+              log(o.toString());
               // Hive wraps strings in double quotes, remove
-              data[i] = _models[0].mapEnum(i, ((String) o).replace("\"", ""));
+              // Hack for now on this specific data set
+              if (((String) o).replace("\"", "").equals("F")) data[i] = 0;
+              if (((String) o).replace("\"", "").equals("I")) data[i] = 1;
+              if (((String) o).replace("\"", "").equals("M")) data[i] = 2;
+
+              //data[i] = _models[0].mapEnum(i, ((String) o).replace("\"", ""));
               if (data[i] == -1)
-                throw new UDFArgumentException("scoredata(...): The value " + (String) o
-                    + " is not a known category for column " + _models[0].getNames()[i]);
+                throw new UDFArgumentException("sucks2suck");
+                //throw new UDFArgumentException("scoredata(...): The value " + (String) o
+                    //+ " is not a known category for column " + _models[0].getNames()[i]);
             } else if (o instanceof Double) {
               data[i] = ((Double) o).doubleValue();
             } else if (o instanceof Float) {
@@ -153,25 +152,13 @@ class ScoreDataUDF extends GenericUDF {
           } catch (Throwable e) {
             throw new UDFArgumentException("Unexpected exception on argument # " + i + ". " + e.toString());
           }
+
         }
 
         try {
-          ArrayList<Object> result_set = new ArrayList<>();
+          ArrayList<double[]> result_set = mg.scoreAll(data);
 
-          for (int i = 0; i < NUMMODEL; i++) {
-            double[] toscore = new double[_models[i].nfeatures()];
-            String[] predictors = _models[i].getNames();
-
-            // use map index to fill toscore w/ correct subset of predictors
-            // optimize this later
-            for (int j = 0; j < toscore.length; j++) {
-              toscore[j] = data[columnIndexes.get(predictors[j])];
-            }
-
-            double[] response = new double[_models[0].getPredsSize()]; // assume all models have the same response
-            double[] d = _models[i].score0(toscore, response);
-            result_set.add(d[2]);
-          }
+          log(Double.toString(result_set.get(0)[0]));
 
           long end = System.currentTimeMillis() - start;
           log("End: evaluate(), took: " + Long.toString(end));

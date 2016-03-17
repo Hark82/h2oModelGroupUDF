@@ -11,7 +11,7 @@ public class ModelGroup extends ArrayList<GenModel> {
     public LinkedHashMap<String, Integer> _groupPredictors;
 
     public ModelGroup() {
-        this._groupPredictors = new LinkedHashMap<>();
+        this._groupPredictors = new LinkedHashMap<String, Integer>();
     }
 
     public void reflectAndAddModel(String cl) {
@@ -42,7 +42,7 @@ public class ModelGroup extends ArrayList<GenModel> {
 
     // for now assume data[] is already doubles, make more generic later
     public ArrayList<double[]> scoreAll(double[] data) {
-        ArrayList<double[]> result_set = new ArrayList<>();
+        ArrayList<double[]> result_set = new ArrayList<double[]>();
 
         for (int i = 0; i < this.size(); i++) {
             // Fill the appropriate data for each model using columnIndex and score
