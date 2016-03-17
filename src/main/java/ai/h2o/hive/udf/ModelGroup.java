@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import hex.genmodel.GenModel;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
-import org.apache.hadoop.hive.ql.metadata.HiveException;
-import org.apache.log4j.spi.ThrowableInformation;
 
 /**
  * Created by nkkarpov on 3/16/16.

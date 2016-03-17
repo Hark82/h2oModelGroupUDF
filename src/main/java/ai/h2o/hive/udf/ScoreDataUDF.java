@@ -2,10 +2,8 @@ package ai.h2o.hive.udf;
 
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import hex.genmodel.GenModel;
-import org.apache.commons.logging.Log;
 import org.apache.hadoop.hive.ql.exec.MapredContext;
 import org.apache.hadoop.hive.ql.udf.UDFType;
 import org.apache.hadoop.hive.ql.exec.Description;
@@ -18,7 +16,6 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.PrimitiveObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;
 import org.apache.hadoop.mapred.JobConf;
-import org.apache.log4j.Logger;
 
 @UDFType(deterministic = true, stateful = false)
 @Description(name="scoredata", value="_FUNC_(*) - Returns a score for the given row",
