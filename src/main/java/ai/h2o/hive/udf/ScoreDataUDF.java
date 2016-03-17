@@ -94,12 +94,12 @@ class ScoreDataUDF extends GenericUDF {
               && pCat != PrimitiveObjectInspector.PrimitiveCategory.SHORT)
         throw new UDFArgumentException("scoredata(...): Cannot accept type: " + pCat.toString());
       inFieldOI[i] = (PrimitiveObjectInspector) args[i];
-    }
+  }
 
     long end = System.currentTimeMillis() - start;
     log("End: initialize(), took: " + Long.toString(end));
 
-    return ObjectInspectorFactory.getStandardListObjectInspector(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector);
+    return ObjectInspectorFactory.getStandardListObjectInspector(ObjectInspectorFactory.getStandardListObjectInspector(PrimitiveObjectInspectorFactory.javaDoubleObjectInspector));
   }
 
   @Override
@@ -156,9 +156,9 @@ class ScoreDataUDF extends GenericUDF {
         }
 
         try {
-          ArrayList<double[]> result_set = mg.scoreAll(data);
+          ArrayList<ArrayList<Double>> result_set = mg.scoreAll(data);
 
-          log(Double.toString(result_set.get(0)[0]));
+          log(Double.toString(result_set.get(0).get(0)));
 
           long end = System.currentTimeMillis() - start;
           log("End: evaluate(), took: " + Long.toString(end));

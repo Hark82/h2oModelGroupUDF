@@ -1,8 +1,10 @@
 package ai.h2o.hive.udf;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import hex.genmodel.GenModel;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * Created by nkkarpov on 3/16/16.
@@ -41,8 +43,8 @@ public class ModelGroup extends ArrayList<GenModel> {
     }
 
     // for now assume data[] is already doubles, make more generic later
-    public ArrayList<double[]> scoreAll(double[] data) {
-        ArrayList<double[]> result_set = new ArrayList<double[]>();
+    public ArrayList<ArrayList<Double>> scoreAll(double[] data) {
+        ArrayList<ArrayList<Double>> result_set = new ArrayList<ArrayList<Double>>();
 
         for (int i = 0; i < this.size(); i++) {
             // Fill the appropriate data for each model using columnIndex and score
@@ -56,7 +58,10 @@ public class ModelGroup extends ArrayList<GenModel> {
 
             // get & add prediction to result
             double[] prediction = m.score0(model_data, model_response);
-            result_set.add(prediction);
+            ArrayList<Double> p = new ArrayList<Double>();
+            for(double d: prediction) p.add(d);
+
+            result_set.add(p);
         }
 
         return result_set;
