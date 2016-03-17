@@ -30,7 +30,7 @@ class ScoreDataUDF extends GenericUDF {
   GenModel [] _models;
   private final int NUMMODEL = 96;
 
-  ModelGroup mg;
+  ModelGroup _mg;
 
   public void log (String s) {
     System.out.println("ScoreDataUDF: " + s);
@@ -54,7 +54,7 @@ class ScoreDataUDF extends GenericUDF {
     long start = System.currentTimeMillis();
     log("Begin: initialize()");
 
-    mg = new ModelGroup();
+    _mg = new ModelGroup();
 
     String[] model_names = {"ai.h2o.hive.udf.models.glm1",
             "ai.h2o.hive.udf.models.glm2",
@@ -69,13 +69,13 @@ class ScoreDataUDF extends GenericUDF {
             "ai.h2o.hive.udf.models.gbm5",
             "ai.h2o.hive.udf.models.gbm6"};
 
-    mg.reflectAndAddModels(model_names);
+    _mg.reflectAndAddModels(model_names);
 
     // Basic argument count check
     // Expects one less argument than model used; results column is dropped
-    if (args.length != mg._groupPredictors.size()) {
+    if (args.length != _mg._groupPredictors.size()) {
       throw new UDFArgumentLengthException("Incorrect number of arguments." +
-              "  scoredata() requires: "+ Arrays.asList(mg._groupPredictors.keySet())
+              "  scoredata() requires: "+ Arrays.asList(_mg._groupPredictors.keySet())
               +", in the listed order. Received "+args.length+" arguments.");
     }
 
@@ -104,15 +104,13 @@ class ScoreDataUDF extends GenericUDF {
 
   @Override
   public Object evaluate(DeferredObject[] record) throws HiveException {
-
     long start = System.currentTimeMillis();
     log("Begin: evaluate()");
 
-    // Expects one less argument than model used; results column is dropped
-
     if (record != null) {
-      if (record.length == mg._groupPredictors.size()) {
+      if (record.length == _mg._groupPredictors.size()) {
         double[] data = new double[record.length];
+
         //Sadly, HIVE UDF doesn't currently make the field name available.
         //Thus this UDF must depend solely on the arguments maintaining the same
         // field order seen by the original H2O model creation.
@@ -124,15 +122,10 @@ class ScoreDataUDF extends GenericUDF {
               log(o.toString());
               // Hive wraps strings in double quotes, remove
               // Hack for now on this specific data set
-              if (((String) o).replace("\"", "").equals("F")) data[i] = 0;
-              if (((String) o).replace("\"", "").equals("I")) data[i] = 1;
-              if (((String) o).replace("\"", "").equals("M")) data[i] = 2;
-
-              //data[i] = _models[0].mapEnum(i, ((String) o).replace("\"", ""));
+              data[i] = _mg.mapEnum(i, ((String) o).replace("\"", ""));
               if (data[i] == -1)
-                throw new UDFArgumentException("sucks2suck");
-                //throw new UDFArgumentException("scoredata(...): The value " + (String) o
-                    //+ " is not a known category for column " + _models[0].getNames()[i]);
+                throw new UDFArgumentException("scoredata(...): The value " + (String) o
+                    + " is not a known category for column " + _mg._groupIdxToColNames.get(i));
             } else if (o instanceof Double) {
               data[i] = ((Double) o).doubleValue();
             } else if (o instanceof Float) {
@@ -156,9 +149,7 @@ class ScoreDataUDF extends GenericUDF {
         }
 
         try {
-          ArrayList<ArrayList<Double>> result_set = mg.scoreAll(data);
-
-          log(Double.toString(result_set.get(0).get(0)));
+          ArrayList<ArrayList<Double>> result_set = _mg.scoreAll(data);
 
           long end = System.currentTimeMillis() - start;
           log("End: evaluate(), took: " + Long.toString(end));
@@ -169,7 +160,7 @@ class ScoreDataUDF extends GenericUDF {
         }
       } else {
         throw new UDFArgumentException("Incorrect number of arguments." +
-            "  scoredata() requires: " + Arrays.asList(_models[0].getNames()) + ", in order. Received "
+            "  scoredata() requires: " + Arrays.asList(_mg._groupPredictors.size()) + ", in order. Received "
             +record.length+" arguments.");
       }
     } else { // record == null

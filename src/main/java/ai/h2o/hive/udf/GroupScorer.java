@@ -28,11 +28,11 @@ public class GroupScorer {
 
         double[] data = { 2, 0.4550, 0.3650, 0.0950, 0.5140, 0.2245, 0.1010, 0.1500, 15.0 };
 
-        /*ArrayList<double[]> scores = _models.scoreAll(data);
+        ArrayList<ArrayList<Double>> scores = _models.scoreAll(data);
 
-        for(double[] prediction: scores) {
-            for(int i = 0; i < prediction.length; i++) System.out.print(prediction[i] + " ");
+        for(ArrayList<Double> prediction: scores) {
+            for(int i = 0; i < prediction.size(); i++) System.out.print(prediction.get(i) + " ");
             System.out.println();
-        } */
+        }
     }
 }

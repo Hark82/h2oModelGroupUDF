@@ -5,15 +5,36 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import hex.genmodel.GenModel;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
+import org.apache.hadoop.hive.ql.metadata.HiveException;
+import org.apache.log4j.spi.ThrowableInformation;
 
 /**
  * Created by nkkarpov on 3/16/16.
  */
 public class ModelGroup extends ArrayList<GenModel> {
-    public LinkedHashMap<String, Integer> _groupPredictors;
+
+    class Predictor {
+        public int index;
+        public String[] domains;
+        public Predictor(int index, String[] domains) {
+            this.index = index;
+            this.domains = domains;
+        }
+        public String toString() {
+            if (this.domains != null)
+                return Integer.toString(this.index) + " " + Arrays.asList(this.domains);
+            else
+                return Integer.toString(this.index) + " numerical";
+        }
+    }
+
+    public LinkedHashMap<String, Predictor> _groupPredictors;  // needs to guarantee order so, linked
+    public ArrayList<String> _groupIdxToColNames;
 
     public ModelGroup() {
-        this._groupPredictors = new LinkedHashMap<String, Integer>();
+        this._groupPredictors = new LinkedHashMap<String, Predictor>();
+        this._groupIdxToColNames = new ArrayList<String>();
     }
 
     public void reflectAndAddModel(String cl) {
@@ -35,11 +56,19 @@ public class ModelGroup extends ArrayList<GenModel> {
         for(int i = 0; i < predictors.length; i++) {
             if(this._groupPredictors.get(predictors[i]) == null) {
                 // Add this new model's predictors to global predictors if doesn't exist
-                this._groupPredictors.put(predictors[i], this._groupPredictors.size());
+                this._groupPredictors.put(predictors[i], new Predictor(this._groupPredictors.size(), m.getDomainValues(i)));
+                this._groupIdxToColNames.add(predictors[i]);
             }
         }
 
         this.add(m);
+    }
+
+    public int mapEnum(int colIdx, String enumValue) {
+        String[] domain = this._groupPredictors.get(this._groupIdxToColNames.get(colIdx)).domains;
+        if (domain==null || domain.length==0) return -1;
+        for (int i=0; i<domain.length;i++) if (enumValue.equals(domain[i])) return i;
+        return -1;
     }
 
     // for now assume data[] is already doubles, make more generic later
@@ -53,7 +82,7 @@ public class ModelGroup extends ArrayList<GenModel> {
             double[] model_data = new double[features.length];
             double[] model_response = new double[m.getPredsSize()];
             for(int j = 0; j < features.length; j++) {
-                model_data[j] = data[this._groupPredictors.get(features[j])];
+                model_data[j] = data[this._groupPredictors.get(features[j]).index];
             }
 
             // get & add prediction to result
