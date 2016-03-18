@@ -53,20 +53,7 @@ class ScoreDataUDF extends GenericUDF {
 
     _mg = new ModelGroup();
 
-    String[] model_names = {"ai.h2o.hive.udf.models.glm1",
-            "ai.h2o.hive.udf.models.glm2",
-            "ai.h2o.hive.udf.models.glm3",
-            "ai.h2o.hive.udf.models.glm4",
-            "ai.h2o.hive.udf.models.glm5",
-            "ai.h2o.hive.udf.models.glm6",
-            "ai.h2o.hive.udf.models.gbm1",
-            "ai.h2o.hive.udf.models.gbm2",
-            "ai.h2o.hive.udf.models.gbm3",
-            "ai.h2o.hive.udf.models.gbm4",
-            "ai.h2o.hive.udf.models.gbm5",
-            "ai.h2o.hive.udf.models.gbm6"};
-
-    _mg.reflectAndAddModels(model_names);
+    _mg.reflectAndAddModels(Models.NAMES);
 
     // Basic argument count check
     // Expects one less argument than model used; results column is dropped
@@ -115,8 +102,6 @@ class ScoreDataUDF extends GenericUDF {
           try {
             Object o = inFieldOI[i].getPrimitiveJavaObject(record[i].get());
             if (o instanceof java.lang.String) {
-              log("o is String");
-              log(o.toString());
               // Hive wraps strings in double quotes, remove
               // Hack for now on this specific data set
               data[i] = _mg.mapEnum(i, ((String) o).replace("\"", ""));
