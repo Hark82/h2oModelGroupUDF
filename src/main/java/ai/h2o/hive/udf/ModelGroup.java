@@ -3,6 +3,9 @@ package ai.h2o.hive.udf;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+
 import hex.genmodel.GenModel;
 
 /**
@@ -90,5 +93,9 @@ public class ModelGroup extends ArrayList<GenModel> {
         }
 
         return result_set;
+    }
+
+    public String getColNamesString () {
+        return StringUtils.join(this._groupIdxToColNames, ",");
     }
 }
