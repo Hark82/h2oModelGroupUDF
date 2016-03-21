@@ -33,7 +33,7 @@ mvn clean && mvn compile && mvn package -Dmaven.test.skip=true && java -cp ./loc
 ```
 This cleans any current builds, compiles & packages (skipping tests), & runs ScoreDataHQLGenerator -- which outputs the HQL that should be run in Hive. You can > the output directly into a h2omodelgroup.hql file & then run `source h2omodelgroup.hql` in Hive to apply (**check to make sure the paths to the two JARS are correct!**)
 
-Upload the h2o-genmodel.jar & ScoreData-1.0-SNAPSHOT.jar to wherever your Hive environment lives. You can keep it on the local filesystem or put it on the Hadoop FS - either way will work as long as you keep in mind the paths when running "ADD JAR ..."
+Upload the h2o-genmodel.jar & ScoreData-1.0-SNAPSHOT.jar somewhere you can access from Hive. You can keep it on the local filesystem or put it on the Hadoop FS - either way will work as long as you keep in mind the paths when running "ADD JAR ..."
 
 ### 5. Scoring in Hive
 
