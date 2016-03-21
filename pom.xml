@@ -67,12 +67,17 @@
 			<artifactId>jetty</artifactId>
 			<version>6.1.26.hwx</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
 	</dependencies>
 	<repositories>
-                <repository>
-                        <id>localjars</id>
-                        <url>file://${basedir}/localjars</url>
-                </repository>
+		<repository>
+				<id>localjars</id>
+				<url>file://${basedir}/localjars</url>
+		</repository>
 		<repository>
 			<releases>
 				<enabled>true</enabled>

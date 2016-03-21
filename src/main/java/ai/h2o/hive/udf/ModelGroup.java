@@ -3,10 +3,8 @@ package ai.h2o.hive.udf;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.Map;
-import org.apache.commons.lang.StringUtils;
-
 import hex.genmodel.GenModel;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by nkkarpov on 3/16/16.
@@ -96,6 +94,11 @@ public class ModelGroup extends ArrayList<GenModel> {
     }
 
     public String getColNamesString () {
-        return StringUtils.join(this._groupIdxToColNames, ",");
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < this._groupIdxToColNames.size(); i++) {
+            sb.append(this._groupIdxToColNames.get(i));
+            if (i+1 != this._groupIdxToColNames.size()) sb.append(",");
+        }
+        return sb.toString();
     }
 }

@@ -25,7 +25,7 @@ def main():
 	for x in range(len(modelnames)):
 		f.write("          \"ai.h2o.hive.udf.models." + modelnames[x] + "\"")
 		if x+1 == len(modelnames):
-			f.write("}\n")
+			f.write("};\n")
 		else:
 			f.write(",\n")
 

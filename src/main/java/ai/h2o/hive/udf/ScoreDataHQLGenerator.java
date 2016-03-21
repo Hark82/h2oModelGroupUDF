@@ -12,6 +12,9 @@ public class ScoreDataHQLGenerator {
         ModelGroup _models = new ModelGroup();
         _models.reflectAndAddModels(Models.NAMES);
 
+        System.out.println("-- model order (alphabetical)");
+        for(String m: Models.NAMES) System.out.println(m);
+        System.out.println();
         System.out.println("-- add jars");
         System.out.println("ADD JAR localjars/h2o-genmodel.jar;");
         System.out.println("ADD JAR target/ScoreData-1.0-SNAPSHOT.jar;");
@@ -21,5 +24,8 @@ public class ScoreDataHQLGenerator {
         System.out.println();
         System.out.println("-- column names reference");
         System.out.println("set hivevar:scoredatacolnames=" + _models.getColNamesString());
+        System.out.println();
+        System.out.println("-- sample query, returns nested array");
+        System.out.println("-- select fn(${scoredatacolnames}) from TABLEWITHAPPROPRIATEDATA");
     }
 }
