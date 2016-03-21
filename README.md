@@ -15,37 +15,26 @@ git clone https://github.com/nkarpov/h2oModelGroupUDF
 ## Workflow
 
 ### 1. Train H2O Models
-Download the abalone dataset
+Load data into H2O
+Train N models
+Use any of the client APIs (Python, R, Flow)
 
 ### 2. Download H2O Pojos & Dependency JAR
-Download each pojo & put it src/main/java/ai/h2o/hive/udf/models/
+Download each pojo & put them in src/main/java/ai/h2o/hive/udf/models/
 Download h2o-genmodel & put it in /localjars
 
 ### 3. Run setup.py
-Run setup.py to create static Models.java class & add package to the top of each model file
+Run setup.py to create static Models.java class & add package to the top of each model definition.
 
 ### 4. Compile & Package UDF JAR
-...
+From the root directory of this project, run:
+```
+mvn clean && mvn compile && mvn package -Dmaven.test.skip=true && java -cp ./localjars/h2o-genmodel.jar:./target/ScoreData-1.0-SNAPSHOT.jar:./localjars/commons-lang3-3.4.jar ai.h2o.hive.udf.ScoreDataHQLGenerator
+```
+This cleans any current builds, compiles & packages (skipping tests), & runs ScoreDataHQLGenerator -- which outputs the HQL that should be run in Hive. You can > the output directly into a h2omodelgroup.hql file & then run `source h2omodelgroup.hql` in Hive to apply (**check to make sure the paths to the two JARS are correct!**)
 
-### 5. Generate HQL & run in Hive
-...
+Upload the h2o-genmodel.jar & ScoreData-1.0-SNAPSHOT.jar to wherever your Hive environment lives. You can keep it on the local filesystem or put it on the Hadoop FS - either way will work as long as you keep in mind the paths when running "ADD JAR ..."
 
-
-
-2. Download POJOs & place in ./src/main/java/ai/h2o/hive/udf/models
-3. Download h2o-genmodel & place into ./localjars
-4. Run python ./scripts/setup.py to add package info to POJOs & create static class for reflection in the UDF
-5. Compile & Package UDF
-6. Generate .hql file, then load & and score data in Hive
+### 5. Scoring in Hive
 
 
-
-##
-
-1. Create Models
-Load training data into H2O & train N models
-2. Download POJOs & place in ./src/main/java/ai/h2o/hive/udf/models
-3. Download h2o-genmodel & place into ./localjars
-4. Run python ./scripts/setup.py to add package info to POJOs & create static class for reflection in the UDF
-5. Compile & Package UDF
-6. Generate .hql file, then load & and score data in Hive

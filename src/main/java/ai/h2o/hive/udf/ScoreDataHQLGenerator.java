@@ -13,7 +13,7 @@ public class ScoreDataHQLGenerator {
         _models.reflectAndAddModels(Models.NAMES);
 
         System.out.println("-- model order (alphabetical)");
-        for(String m: Models.NAMES) System.out.println(m);
+        for(String m: Models.NAMES) System.out.println("-- " + m);
         System.out.println();
         System.out.println("-- add jars");
         System.out.println("ADD JAR localjars/h2o-genmodel.jar;");
