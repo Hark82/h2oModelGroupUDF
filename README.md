@@ -36,5 +36,28 @@ This cleans any current builds, compiles & packages (skipping tests), & runs Sco
 Upload the h2o-genmodel.jar & ScoreData-1.0-SNAPSHOT.jar somewhere you can access from Hive. You can keep it on the local filesystem or put it on the Hadoop FS - either way will work as long as you keep in mind the paths when running "ADD JAR ..."
 
 ### 5. Scoring in Hive
+The above command will generate HQL similar to below:
+```
+-- model order (alphabetical)
+-- ai.h2o.hive.udf.models.deeplearning_741ae095_5cc4_415c_a726_f4e26762f3fa
+-- ai.h2o.hive.udf.models.drf_99268734_ddf8_43b3_87e4_84f092df5292
+-- ai.h2o.hive.udf.models.gbm_094fceb2_48a2_4447_931b_2aeed114c08a
+-- ai.h2o.hive.udf.models.glm_a00273fc_04a0_4c0c_b5a6_22fba753ca1b
 
+-- add jars
+ADD JAR localjars/h2o-genmodel.jar;
+ADD JAR target/ScoreData-1.0-SNAPSHOT.jar;
 
+-- create fn definition
+CREATE TEMPORARY FUNCTION fn AS "ai.h2o.hive.udf.ScoreDataUDF";
+
+-- column names reference
+set hivevar:scoredatacolnames=C1,C2,C3,C4,C5,C6,C7,C8
+
+-- sample query, returns nested array
+-- select fn(${scoredatacolnames}) from TABLEWITHAPPROPRIATEDATA
+```
+
+- You must make sure the JARs are added correctly (double check the paths & update, particularly if you put them onto Hadoop FS itself)
+- Run CREATE TEMPORARY FUN... 
+- Refer to the sample select query to structure your scoring query

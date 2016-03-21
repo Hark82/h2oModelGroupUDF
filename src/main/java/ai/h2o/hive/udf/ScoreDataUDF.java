@@ -88,8 +88,8 @@ class ScoreDataUDF extends GenericUDF {
 
   @Override
   public Object evaluate(DeferredObject[] record) throws HiveException {
-    long start = System.currentTimeMillis();
-    log("Begin: evaluate()");
+    //long start = System.currentTimeMillis();
+    //log("Begin: evaluate()");
 
     if (record != null) {
       if (record.length == _mg._groupPredictors.size()) {
@@ -133,8 +133,8 @@ class ScoreDataUDF extends GenericUDF {
         try {
           ArrayList<ArrayList<Double>> result_set = _mg.scoreAll(data);
 
-          long end = System.currentTimeMillis() - start;
-          log("End: evaluate(), took: " + Long.toString(end));
+          //long end = System.currentTimeMillis() - start;
+          //log("End: evaluate(), took: " + Long.toString(end));
 
           return result_set;
         } catch (Throwable e) {
