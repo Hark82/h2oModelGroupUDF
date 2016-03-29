@@ -4,7 +4,7 @@ package ai.h2o.hive.udf;
  * Created by nkkarpov on 3/16/16.
  */
 
-import java.util.ArrayList;
+import hex.genmodel.GenModel;
 
 public class ScoreDataHQLGenerator {
 
@@ -13,7 +13,13 @@ public class ScoreDataHQLGenerator {
         _models.reflectAndAddModels(Models.NAMES);
 
         System.out.println("-- model order (alphabetical)");
-        for(String m: Models.NAMES) System.out.println("-- " + m);
+        for(int i = 0; i < _models.size(); i++) {
+            GenModel m = _models.get(i);
+            System.out.println("-- Name: " + Models.NAMES[i] + "\n"
+                    + "--   Category: " + m.getModelCategory() + "\n"
+                    + "--   Hive Select: scores["+i+"][0 - "+(m.getPredsSize()-1)+"]");
+        }
+
         System.out.println();
         System.out.println("-- add jars");
         System.out.println("ADD JAR localjars/h2o-genmodel.jar;");
