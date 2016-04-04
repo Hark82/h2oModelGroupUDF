@@ -5,3 +5,4 @@ target/
 localjars/
 src/main/java/ai/h2o/hive/udf/models/*
 src/main/java/ai/h2o/hive/udf/Models.java
+pom.xml
