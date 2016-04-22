@@ -6,6 +6,8 @@ package ai.h2o.hive.udf;
 
 import hex.genmodel.GenModel;
 
+import java.io.PrintWriter;
+
 public class ScoreDataHQLGenerator {
 
     public static void main (String[] args) {
@@ -33,5 +35,16 @@ public class ScoreDataHQLGenerator {
         System.out.println();
         System.out.println("-- sample query, returns nested array");
         System.out.println("-- select fn(${scoredatacolnames}) from TABLEWITHAPPROPRIATEDATA");
+
+        // Also write to file
+        PrintWriter writer;
+        try {
+            String[] cols = _models.getColNamesString().split(",");
+            writer = new PrintWriter("colnames.txt", "UTF-8");
+            for (int i = 0; i < cols.length; i++) {
+                writer.println(cols[i]);
+            }
+            writer.close();
+        } catch (Exception e) {}
     }
 }
