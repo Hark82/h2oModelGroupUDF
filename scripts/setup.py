@@ -29,7 +29,6 @@ def writePackageInfo():
 	for file in os.listdir(modelsdir):
 		print "Writing package info to: " + file
 		line_prepender(modelsdir+"/"+file, "package ai.h2o.hive.udf.models;")
-		modelnames.append(file.split(".")[0])
 
 	print "Finish writing package info"
 
@@ -42,6 +41,26 @@ def createModelsClass():
 	f.write("public class Models {\n")
 	f.write("     public static final String[] NAMES = {\n")
 
+	# if supplied, get modelorder
+	if len(sys.argv) == 3:
+		m = open(sys.argv[2], 'r')
+		modelorder = []
+		for line in m.readlines():
+			modelorder.append(line.strip())
+		m.close()
+
+	# load models in supplied order or not
+	mdir = os.listdir(modelsdir)
+	if len(sys.argv) == 3:
+		for model in modelorder:
+			for line in mdir:
+				if model == line:
+					modelnames.append(line.split(".")[0])
+	else:
+		for line in mdir:
+			modelnames.append(line.split(".")[0])
+
+	# print to Models.java
 	for x in range(len(modelnames)):
 		f.write("          \"ai.h2o.hive.udf.models." + modelnames[x] + "\"")
 		if x+1 == len(modelnames):
@@ -58,8 +77,8 @@ def printCompileCommand(name):
 	print "mvn clean && mvn compile && mvn package -Dmaven.test.skip=true && java -cp ./localjars/h2o-genmodel.jar:./target/"+name+"-1.0-SNAPSHOT.jar ai.h2o.hive.udf.ScoreDataHQLGenerator"
 
 def main():
-	if len(sys.argv) == 1:
-		raise Exception("Need 1 argument: name of output JAR")
+	if len(sys.argv) < 2:
+		raise Exception("Missing arguments! Usage: setup.py outputJarName [modelorder]")
 
 	writePackageInfo()
 	createModelsClass()
