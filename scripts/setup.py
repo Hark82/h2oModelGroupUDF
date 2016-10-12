@@ -8,6 +8,9 @@ modelnames = []
 def line_prepender(filename, line):
 	with open(filename, 'r+') as f:
 		content = f.read()
+		if content[0:7] == "package":
+			print "skipping: %s -- package definition exists" % filename
+			return
 		f.seek(0, 0)
 		f.write(line.rstrip('\r\n') + '\n' + content)
 
